@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Config Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🔄 Universal Config Converter</h1>
+            <p class="subtitle">Convert between YAML, JSON, TOML, and ENV formats seamlessly</p>
+        </header>
+
+        <!-- Mode Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="single">Single File</button>
+            <button class="tab-button" data-tab="batch">Batch Conversion</button>
+        </div>
+
+        <!-- Single File Mode -->
+        <div class="tab-content active" id="single-mode">
+            <div class="converter-layout">
+                <!-- Source Panel -->
+                <div class="panel source-panel">
+                    <div class="panel-header">
+                        <h3>Source</h3>
+                        <select id="source-format" class="format-select">
+                            <option value="json">JSON</option>
+                            <option value="yaml">YAML</option>
+                            <option value="toml">TOML</option>
+                            <option value="env">ENV</option>
+                        </select>
+                    </div>
+                    <div class="editor-container">
+                        <textarea id="source-editor" class="editor"
+                            placeholder="Paste your config here or drag & drop a file..."></textarea>
+                        <div id="drop-zone" class="drop-zone">
+                            <div class="drop-zone-content">
+                                <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <p>Drop a config file here</p>
+                                <p class="drop-zone-hint">or click to browse</p>
+                            </div>
+                            <input type="file" id="file-input" accept=".json,.yaml,.yml,.toml,.env" hidden>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <button id="load-file-btn" class="btn btn-secondary">
+                            📁 Load File
+                        </button>
+                        <button id="clear-source-btn" class="btn btn-secondary">
+                            🗑️ Clear
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Target Panel -->
+                <div class="panel target-panel">
+                    <div class="panel-header">
+                        <h3>Target</h3>
+                        <select id="target-format" class="format-select">
+                            <option value="json">JSON</option>
+                            <option value="yaml" selected>YAML</option>
+                            <option value="toml">TOML</option>
+                            <option value="env">ENV</option>
+                        </select>
+                    </div>
+                    <div class="editor-container">
+                        <textarea id="target-editor" class="editor" readonly
+                            placeholder="Converted output will appear here..."></textarea>
+                    </div>
+                    <div class="panel-footer">
+                        <button id="download-btn" class="btn btn-primary" disabled>
+                            💾 Download
+                        </button>
+                        <button id="copy-btn" class="btn btn-secondary" disabled>
+                            📋 Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options Panel -->
+            <div class="options-panel">
+                <h3>Options</h3>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="pretty-print" checked>
+                    <span>Pretty Print</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="sort-keys">
+                    <span>Sort Keys</span>
+                </label>
+                <label class="input-label">
+                    <span>Indentation:</span>
+                    <input type="number" id="indent-size" min="1" max="8" value="2" class="indent-input">
+                </label>
+                <button id="convert-btn" class="btn btn-primary btn-large">
+                    ⚡ Convert
+                </button>
+            </div>
+
+            <!-- Error Display -->
+            <div id="error-display" class="error-display hidden">
+                <span class="error-icon">⚠️</span>
+                <span id="error-message"></span>
+                <button id="close-error" class="close-btn">×</button>
+            </div>
+        </div>
+
+        <!-- Batch Mode -->
+        <div class="tab-content" id="batch-mode">
+            <div class="batch-container">
+                <div class="batch-upload">
+                    <div id="batch-drop-zone" class="batch-drop-zone">
+                        <svg class="drop-zone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drop multiple config files here</h3>
+                        <p>or click to select files</p>
+                        <input type="file" id="batch-file-input" multiple accept=".json,.yaml,.yml,.toml,.env" hidden>
+                    </div>
+                </div>
+
+                <div class="batch-options">
+                    <label class="input-label">
+                        <span>Convert to:</span>
+                        <select id="batch-target-format" class="format-select">
+                            <option value="json">JSON</option>
+                            <option value="yaml">YAML</option>
+                            <option value="toml">TOML</option>
+                            <option value="env">ENV</option>
+                        </select>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="batch-pretty" checked>
+                        <span>Pretty Print</span>
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="batch-sort">
+                        <span>Sort Keys</span>
+                    </label>
+                    <button id="batch-convert-btn" class="btn btn-primary btn-large" disabled>
+                        ⚡ Convert All Files
+                    </button>
+                </div>
+
+                <div id="batch-results" class="batch-results hidden">
+                    <h3>Conversion Results</h3>
+                    <div id="batch-results-list"></div>
+                    <button id="download-all-btn" class="btn btn-primary">
+                        💾 Download All as ZIP
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Made with ❤️ | Supports JSON, YAML, TOML, ENV</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
