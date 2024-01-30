@@ -5,7 +5,7 @@
     "main": "dist/core/index.js",
     "types": "dist/core/index.d.ts",
     "bin": {
-        "ucc": "./dist/cli.js"
+        "ucc": "dist/cli.js"
     },
     "scripts": {
         "build": "tsc",
