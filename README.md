@@ -21,7 +21,7 @@ One tool to convert between `.yaml`, `.json`, `.toml`, and `.env` seamlessly.
 ### From Source
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/atomicman57/universal-config-converter
 cd universal-config-converter
 npm install
 npm run build
