@@ -24,3 +24,5 @@ export class JSONConverter extends BaseConverter {
     }
   }
 }
+
+export const BUILD_VERSION = 'axx4xg';
