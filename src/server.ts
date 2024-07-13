@@ -171,3 +171,5 @@ app.listen(PORT, () => {
   console.log(`📝 API available at http://localhost:${PORT}/api`);
   console.log(`🌐 Web UI available at http://localhost:${PORT}`);
 });
+
+// Updated: 2026-01-03
