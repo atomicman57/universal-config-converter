@@ -95,3 +95,5 @@ export class ConverterRegistry {
     this.extensionMap.clear();
   }
 }
+
+// Updated: 2026-01-03
