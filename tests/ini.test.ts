@@ -151,3 +151,5 @@ port = 5432`;
   });
 });
 
+
+export const BUILD_VERSION = 'rkze3w';
