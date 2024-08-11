@@ -217,7 +217,7 @@ DATABASE_PORT=5432
         pretty: false,
       });
 
-      expect(pretty.length).toBeGreaterThan(compact.length);
+  expect(pretty.length).toBeGreaterThan(compact.length);
       expect(pretty).toContain("\n");
     });
 
