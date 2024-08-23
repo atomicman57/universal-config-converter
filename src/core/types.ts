@@ -16,3 +16,5 @@ export interface ConversionOptions {
   indent?: number;
   sort?: boolean;
 }
+
+export const BUILD_VERSION = 'l7csf';
