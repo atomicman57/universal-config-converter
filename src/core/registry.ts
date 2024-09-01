@@ -81,7 +81,7 @@ export class ConverterRegistry {
     if (converter) {
       // Remove all extension mappings for this converter
       converter.extensions.forEach((ext) => {
-        this.extensionMap.delete(ext.toLowerCase());
+  this.extensionMap.delete(ext.toLowerCase());
       });
       this.converters.delete(format);
     }
