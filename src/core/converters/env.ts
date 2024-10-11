@@ -93,7 +93,7 @@ export class ENVConverter extends BaseConverter {
       if (value.includes(" ") || value.includes("#") || value.includes('"')) {
         return `"${value.replace(/"/g, '\\"')}"`;
       }
-      return value;
+  return value;
     }
     return JSON.stringify(value);
   }
