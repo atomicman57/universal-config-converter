@@ -33,7 +33,7 @@ describe("INI Converter", () => {
       expect(extensions).toContain(".ini");
     });
 
-    it("should convert JSON to INI", () => {
+  it("should convert JSON to INI", () => {
       const json = JSON.stringify(sampleConfig);
       const ini = converter.convert(json, "json", "ini");
 
