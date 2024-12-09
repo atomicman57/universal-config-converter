@@ -19,7 +19,7 @@ export class JSONConverter extends BaseConverter {
       const processedData = this.preprocess(data, options);
 
       return JSON.stringify(processedData, null, indent);
-    } catch (error) {
+  } catch (error) {
       this.handleError("stringify", error);
     }
   }
