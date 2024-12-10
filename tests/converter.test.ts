@@ -21,7 +21,7 @@ describe("UniversalConfigConverter", () => {
   };
 
   describe("JSON conversion", () => {
-    it("should parse JSON correctly", () => {
+  it("should parse JSON correctly", () => {
       const json = JSON.stringify(sampleConfig);
       const parsed = converter.parse(json, "json");
       expect(parsed).toEqual(sampleConfig);
