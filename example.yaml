@@ -13,3 +13,5 @@ features:
   logging: true
   cache: true
   metrics: false
+
+<!-- Updated: 2026-01-03 -->
