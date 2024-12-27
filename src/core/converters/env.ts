@@ -35,7 +35,7 @@ export class ENVConverter extends BaseConverter {
 
       // Parse nested keys (e.g., DATABASE_HOST -> database.host)
       this.setNestedValue(result, key, value);
-    }
+  }
 
     return result;
   }
