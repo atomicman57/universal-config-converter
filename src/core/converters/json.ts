@@ -8,7 +8,7 @@ export class JSONConverter extends BaseConverter {
   parse(content: string): ConfigData {
     try {
       return JSON.parse(content);
-    } catch (error) {
+  } catch (error) {
       this.handleError("parse", error);
     }
   }
