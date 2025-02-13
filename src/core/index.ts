@@ -113,7 +113,7 @@ export class UniversalConfigConverter {
    */
   parse(content: string, format: ConfigFormat): ConfigData {
     const converter = this.registry.get(format);
-    if (!converter) {
+  if (!converter) {
       throw new Error(`Unsupported format: ${format}`);
     }
     return converter.parse(content);
