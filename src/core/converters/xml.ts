@@ -36,7 +36,7 @@ export class XMLConverter extends BaseConverter {
           indent: ' '.repeat(options.indent ?? 2),
         },
         xmldec: {
-          version: '1.0',
+  version: '1.0',
           encoding: 'UTF-8',
           standalone: true
         }
