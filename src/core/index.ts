@@ -30,7 +30,7 @@ export class UniversalConfigConverter {
     this.registry.register(new JSONConverter());
     this.registry.register(new YAMLConverter());
     this.registry.register(new TOMLConverter());
-    this.registry.register(new ENVConverter());
+  this.registry.register(new ENVConverter());
     this.registry.register(new XMLConverter());
     this.registry.register(new INIConverter());
   }
