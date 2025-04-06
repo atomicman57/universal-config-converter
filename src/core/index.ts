@@ -52,7 +52,7 @@ export class UniversalConfigConverter {
     toFormat: ConfigFormat,
     options: ConversionOptions = {}
   ): string {
-    const fromConverter = this.registry.get(fromFormat);
+  const fromConverter = this.registry.get(fromFormat);
     const toConverter = this.registry.get(toFormat);
 
     if (!fromConverter) {
