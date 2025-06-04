@@ -1,19 +1,23 @@
-import { Converter, ConfigData, ConversionOptions } from '../types';
+import { BaseConverter } from "./base";
+import { ConfigData, ConversionOptions, ConfigFormat } from "../types";
 
-export class ENVConverter implements Converter {
+export class ENVConverter extends BaseConverter {
+  readonly format: ConfigFormat = "env";
+  readonly extensions = [".env"];
+
   parse(content: string): ConfigData {
     const result: ConfigData = {};
-    const lines = content.split('\n');
+    const lines = content.split("\n");
 
     for (const line of lines) {
       const trimmed = line.trim();
-      
+
       // Skip empty lines and comments
-      if (!trimmed || trimmed.startsWith('#')) {
+      if (!trimmed || trimmed.startsWith("#")) {
         continue;
       }
 
-      const equalIndex = trimmed.indexOf('=');
+      const equalIndex = trimmed.indexOf("=");
       if (equalIndex === -1) {
         continue;
       }
@@ -22,8 +26,10 @@ export class ENVConverter implements Converter {
       let value = trimmed.substring(equalIndex + 1).trim();
 
       // Remove quotes if present
-      if ((value.startsWith('"') && value.endsWith('"')) || 
-          (value.startsWith("'") && value.endsWith("'"))) {
+      if (
+        (value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))
+      ) {
         value = value.substring(1, value.length - 1);
       }
 
@@ -36,16 +42,16 @@ export class ENVConverter implements Converter {
 
   stringify(data: ConfigData, options: ConversionOptions = {}): string {
     const lines: string[] = [];
-    const processedData = options.sort ? this.sortKeys(data) : data;
-    
-    this.flattenObject(processedData, '', lines);
-    return lines.join('\n');
+    const processedData = this.preprocess(data, options);
+
+    this.flattenObject(processedData, "", lines);
+    return lines.join("\n");
   }
 
   private setNestedValue(obj: ConfigData, key: string, value: string): void {
     // Convert SCREAMING_SNAKE_CASE to nested object
-    const parts = key.split('_').map(p => p.toLowerCase());
-    
+    const parts = key.split("_").map((p) => p.toLowerCase());
+
     let current = obj;
     for (let i = 0; i < parts.length - 1; i++) {
       const part = parts[i];
@@ -54,7 +60,7 @@ export class ENVConverter implements Converter {
       }
       current = current[part];
     }
-    
+
     // Try to parse value as JSON for arrays/objects
     try {
       current[parts[parts.length - 1]] = JSON.parse(value);
@@ -67,8 +73,12 @@ export class ENVConverter implements Converter {
   private flattenObject(obj: any, prefix: string, lines: string[]): void {
     for (const [key, value] of Object.entries(obj)) {
       const envKey = prefix ? `${prefix}_${key}` : key;
-      
-      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+
+      if (
+        value !== null &&
+        typeof value === "object" &&
+        !Array.isArray(value)
+      ) {
         this.flattenObject(value, envKey.toUpperCase(), lines);
       } else {
         const envValue = this.formatValue(value);
@@ -78,26 +88,13 @@ export class ENVConverter implements Converter {
   }
 
   private formatValue(value: any): string {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       // Quote if contains spaces or special characters
-      if (value.includes(' ') || value.includes('#') || value.includes('"')) {
+      if (value.includes(" ") || value.includes("#") || value.includes('"')) {
         return `"${value.replace(/"/g, '\\"')}"`;
       }
       return value;
     }
     return JSON.stringify(value);
   }
-
-  private sortKeys(obj: any): any {
-    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
-      return obj;
-    }
-    
-    const sorted: any = {};
-    Object.keys(obj).sort().forEach(key => {
-      sorted[key] = this.sortKeys(obj[key]);
-    });
-    return sorted;
-  }
 }
-

@@ -1,34 +1,25 @@
-import TOML from '@iarna/toml';
-import { Converter, ConfigData, ConversionOptions } from '../types';
+import TOML from "@iarna/toml";
+import { BaseConverter } from "./base";
+import { ConfigData, ConversionOptions, ConfigFormat } from "../types";
 
-export class TOMLConverter implements Converter {
+export class TOMLConverter extends BaseConverter {
+  readonly format: ConfigFormat = "toml";
+  readonly extensions = [".toml"];
+
   parse(content: string): ConfigData {
     try {
       return TOML.parse(content) as ConfigData;
     } catch (error) {
-      throw new Error(`Failed to parse TOML: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.handleError("parse", error);
     }
   }
 
   stringify(data: ConfigData, options: ConversionOptions = {}): string {
     try {
-      const processedData = options.sort ? this.sortKeys(data) : data;
+      const processedData = this.preprocess(data, options);
       return TOML.stringify(processedData);
     } catch (error) {
-      throw new Error(`Failed to stringify TOML: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.handleError("stringify", error);
     }
-  }
-
-  private sortKeys(obj: any): any {
-    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
-      return obj;
-    }
-    
-    const sorted: any = {};
-    Object.keys(obj).sort().forEach(key => {
-      sorted[key] = this.sortKeys(obj[key]);
-    });
-    return sorted;
   }
 }
-
