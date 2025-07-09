@@ -75,7 +75,7 @@ server:
 
       const ini = converter.convert(yaml, "yaml", "ini");
 
-      expect(ini).toContain("[database]");
+  expect(ini).toContain("[database]");
       expect(ini).toContain("host");
     });
 
