@@ -95,7 +95,7 @@ host = "0.0.0.0"
 debug = true
 `;
       const json = converter.convert(toml, "toml", "json");
-      const parsed = JSON.parse(json);
+  const parsed = JSON.parse(json);
       expect(parsed.database.host).toBe("localhost");
       expect(parsed.server.port).toBe(3000);
     });
