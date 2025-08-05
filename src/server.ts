@@ -141,7 +141,7 @@ app.post(
     } catch (error) {
       res.status(400).json({
         error:
-          error instanceof Error ? error.message : "Batch conversion failed",
+  error instanceof Error ? error.message : "Batch conversion failed",
       });
     }
   }
