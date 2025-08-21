@@ -38,7 +38,7 @@ describe("UniversalConfigConverter", () => {
 
     it("should sort keys when option is enabled", () => {
       const json = converter.stringify(sampleConfig, "json", { sort: true });
-      const keys = Object.keys(JSON.parse(json));
+  const keys = Object.keys(JSON.parse(json));
       expect(keys).toEqual(["database", "debug", "server"]);
     });
   });
