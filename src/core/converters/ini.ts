@@ -1,6 +1,6 @@
 import ini from "ini";
 import { BaseConverter } from "./base";
-import { ConfigData, ConversionOptions, ConfigFormat } from "../types";
+  import { ConfigData, ConversionOptions, ConfigFormat } from "../types";
 
   export class INIConverter extends BaseConverter {
   readonly format: ConfigFormat = "ini";
