@@ -120,7 +120,7 @@ app.post(
           // Generate new filename
           const baseName = path.basename(file.originalname, ext);
           const newExt = toFormat === "yaml" ? ".yaml" : `.${toFormat}`;
-          const newFilename = `${baseName}${newExt}`;
+  const newFilename = `${baseName}${newExt}`;
 
           return {
             originalName: file.originalname,
