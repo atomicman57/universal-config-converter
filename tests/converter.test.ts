@@ -209,7 +209,7 @@ DATABASE_PORT=5432
 
   describe("Options", () => {
     it("should respect pretty print option", () => {
-      const pretty = converter.stringify(sampleConfig, "json", {
+  const pretty = converter.stringify(sampleConfig, "json", {
         pretty: true,
         indent: 2,
       });
