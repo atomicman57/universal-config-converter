@@ -1,36 +1,31 @@
-import yaml from 'js-yaml';
-import { Converter, ConfigData, ConversionOptions } from '../types';
+import yaml from "js-yaml";
+import { BaseConverter } from "./base";
+import { ConfigData, ConversionOptions, ConfigFormat } from "../types";
 
-export class YAMLConverter implements Converter {
+export class YAMLConverter extends BaseConverter {
+  readonly format: ConfigFormat = "yaml";
+  readonly extensions = [".yaml", ".yml"];
+
   parse(content: string): ConfigData {
     try {
       return yaml.load(content) as ConfigData;
     } catch (error) {
-      throw new Error(`Failed to parse YAML: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.handleError("parse", error);
     }
   }
 
   stringify(data: ConfigData, options: ConversionOptions = {}): string {
-    const processedData = options.sort ? this.sortKeys(data) : data;
-    
-    return yaml.dump(processedData, {
-      indent: options.indent ?? 2,
-      lineWidth: -1,
-      noRefs: true,
-      sortKeys: options.sort ?? false
-    });
-  }
+    try {
+      const processedData = this.preprocess(data, options);
 
-  private sortKeys(obj: any): any {
-    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
-      return obj;
+      return yaml.dump(processedData, {
+        indent: options.indent ?? 2,
+        lineWidth: -1,
+        noRefs: true,
+        sortKeys: options.sort ?? false,
+      });
+    } catch (error) {
+      this.handleError("stringify", error);
     }
-    
-    const sorted: any = {};
-    Object.keys(obj).sort().forEach(key => {
-      sorted[key] = this.sortKeys(obj[key]);
-    });
-    return sorted;
   }
 }
-

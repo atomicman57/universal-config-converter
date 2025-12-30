@@ -1,10 +1,12 @@
-export type ConfigFormat = 'yaml' | 'json' | 'toml' | 'env';
+export type ConfigFormat = "yaml" | "json" | "toml" | "env";
 
 export interface ConfigData {
   [key: string]: any;
 }
 
 export interface Converter {
+  readonly format: ConfigFormat;
+  readonly extensions: string[];
   parse(content: string): ConfigData;
   stringify(data: ConfigData, options?: ConversionOptions): string;
 }
@@ -14,4 +16,3 @@ export interface ConversionOptions {
   indent?: number;
   sort?: boolean;
 }
-

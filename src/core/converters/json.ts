@@ -1,31 +1,26 @@
-import { Converter, ConfigData, ConversionOptions } from '../types';
+import { BaseConverter } from "./base";
+import { ConfigData, ConversionOptions, ConfigFormat } from "../types";
 
-export class JSONConverter implements Converter {
+export class JSONConverter extends BaseConverter {
+  readonly format: ConfigFormat = "json";
+  readonly extensions = [".json"];
+
   parse(content: string): ConfigData {
     try {
       return JSON.parse(content);
     } catch (error) {
-      throw new Error(`Failed to parse JSON: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      this.handleError("parse", error);
     }
   }
 
   stringify(data: ConfigData, options: ConversionOptions = {}): string {
-    const indent = options.indent ?? (options.pretty ? 2 : 0);
-    const processedData = options.sort ? this.sortKeys(data) : data;
-    
-    return JSON.stringify(processedData, null, indent);
-  }
+    try {
+      const indent = options.indent ?? (options.pretty ? 2 : 0);
+      const processedData = this.preprocess(data, options);
 
-  private sortKeys(obj: any): any {
-    if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) {
-      return obj;
+      return JSON.stringify(processedData, null, indent);
+    } catch (error) {
+      this.handleError("stringify", error);
     }
-    
-    const sorted: any = {};
-    Object.keys(obj).sort().forEach(key => {
-      sorted[key] = this.sortKeys(obj[key]);
-    });
-    return sorted;
   }
 }
-
