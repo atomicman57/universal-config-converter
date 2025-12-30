@@ -30,13 +30,21 @@ app.post("/api/convert", (req: Request, res: Response) => {
       });
     }
 
-    const validFormats: ConfigFormat[] = ["json", "yaml", "toml", "env", "xml"];
+    const validFormats: ConfigFormat[] = [
+      "json",
+      "yaml",
+      "toml",
+      "env",
+      "xml",
+      "ini",
+    ];
     if (
       !validFormats.includes(fromFormat) ||
       !validFormats.includes(toFormat)
     ) {
       return res.status(400).json({
-        error: "Invalid format. Supported formats: json, yaml, toml, env, xml",
+        error:
+          "Invalid format. Supported formats: json, yaml, toml, env, xml, ini",
       });
     }
 
@@ -92,6 +100,9 @@ app.post(
             case ".xml":
               fromFormat = "xml";
               break;
+            case ".ini":
+              fromFormat = "ini";
+              break;
             case ".env":
               fromFormat = "env";
               break;
@@ -139,12 +150,13 @@ app.post(
 // Get supported formats
 app.get("/api/formats", (req: Request, res: Response) => {
   res.json({
-    formats: ["json", "yaml", "toml", "env", "xml"],
+    formats: ["json", "yaml", "toml", "env", "xml", "ini"],
     description: {
       json: "JavaScript Object Notation",
       yaml: "YAML Ain't Markup Language",
       toml: "Tom's Obvious, Minimal Language",
       xml: "eXtensible Markup Language",
+      ini: "INI Configuration Format",
       env: "Environment Variables",
     },
   });

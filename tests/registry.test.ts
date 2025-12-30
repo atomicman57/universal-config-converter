@@ -43,8 +43,8 @@ describe("ConverterRegistry", () => {
       const converter = new UniversalConfigConverter();
       const formats = converter.getSupportedFormats();
       
-      expect(formats.length).toBe(5);
-      expect(formats).toEqual(expect.arrayContaining(['json', 'yaml', 'toml', 'env', 'xml']));
+      expect(formats.length).toBe(6);
+      expect(formats).toEqual(expect.arrayContaining(['json', 'yaml', 'toml', 'env', 'xml', 'ini']));
     });
 
     it("should return supported extensions", () => {
