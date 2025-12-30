@@ -197,7 +197,7 @@ DATABASE_PORT=5432
     });
 
     it("should throw error for unsupported format", () => {
-      expect(() => converter.parse("content", "xml" as any)).toThrow(
+      expect(() => converter.parse("content", "csv" as any)).toThrow(
         "Unsupported format"
       );
     });

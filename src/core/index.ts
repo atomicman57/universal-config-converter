@@ -5,6 +5,7 @@ import { JSONConverter } from "./converters/json";
 import { YAMLConverter } from "./converters/yaml";
 import { TOMLConverter } from "./converters/toml";
 import { ENVConverter } from "./converters/env";
+import { XMLConverter } from "./converters/xml";
 import {
   ConfigFormat,
   ConfigData,
@@ -29,6 +30,7 @@ export class UniversalConfigConverter {
     this.registry.register(new YAMLConverter());
     this.registry.register(new TOMLConverter());
     this.registry.register(new ENVConverter());
+    this.registry.register(new XMLConverter());
   }
 
   /**
@@ -148,4 +150,10 @@ export class UniversalConfigConverter {
 export * from "./types";
 export { BaseConverter } from "./converters/base";
 export { ConverterRegistry } from "./registry";
-export { JSONConverter, YAMLConverter, TOMLConverter, ENVConverter };
+export {
+  JSONConverter,
+  YAMLConverter,
+  TOMLConverter,
+  ENVConverter,
+  XMLConverter,
+};

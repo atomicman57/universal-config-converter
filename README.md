@@ -1,10 +1,10 @@
 # Universal Config Converter (UCC)
 
-One tool to convert between `.yaml`, `.json`, `.toml`, and `.env` seamlessly.
+One tool to convert between `.yaml`, `.json`, `.toml`, `.xml`, and `.env` seamlessly.
 
 ## Features
 
-- 🔄 Convert between YAML, JSON, TOML, and ENV formats
+- 🔄 Convert between YAML, JSON, TOML, XML, and ENV formats
 - 💻 Use as CLI tool or Web UI
 - 🌐 REST API for programmatic access
 - 📦 Use as Node.js library
@@ -12,6 +12,7 @@ One tool to convert between `.yaml`, `.json`, `.toml`, and `.env` seamlessly.
 - 🔑 Sort keys alphabetically
 - 🌲 Nested object support (with ENV using underscore notation)
 - ⚡ Fast and lightweight
+- 🔌 Plugin architecture - easily add custom formats
 - 🖱️ Drag & drop file upload
 - 🔴 Live preview with real-time conversion
 - 📋 Copy to clipboard
@@ -201,12 +202,35 @@ SERVER_HOST=0.0.0.0
 DEBUG=true
 ```
 
-## ENV Format Notes
+### XML
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <database>
+    <host>localhost</host>
+    <port>5432</port>
+    <name>mydb</name>
+  </database>
+  <server>
+    <port>3000</port>
+    <host>0.0.0.0</host>
+  </server>
+  <debug>true</debug>
+</config>
+```
 
+## Format-Specific Notes
+
+### ENV Format
 - Nested objects use underscore notation (e.g., `DATABASE_HOST` → `database.host`)
 - Keys are automatically converted to SCREAMING_SNAKE_CASE
 - Values with spaces or special characters are automatically quoted
 - Arrays and objects are stored as JSON strings
+
+### XML Format
+- Root element is automatically handled during conversion
+- Attributes are merged into the parent object
+- Arrays are properly detected and converted
 
 ## Configuration Options
 
@@ -365,6 +389,66 @@ converter.convertFile('input.yaml', 'output.json', {
   pretty: true,
   sort: true
 });
+
+// Example 4: Query supported formats
+console.log(converter.getSupportedFormats()); 
+// Output: ['json', 'yaml', 'toml', 'env', 'xml']
+
+console.log(converter.getSupportedExtensions()); 
+// Output: ['.json', '.yaml', '.yml', '.toml', '.env', '.xml']
+```
+
+## Plugin Architecture
+
+UCC features a powerful plugin architecture that allows you to easily add custom format converters.
+
+### Adding a Custom Format
+
+```typescript
+import { BaseConverter, UniversalConfigConverter } from 'universal-config-converter';
+import { ConfigData, ConversionOptions, ConfigFormat } from 'universal-config-converter';
+
+// 1. Create your custom converter by extending BaseConverter
+class INIConverter extends BaseConverter {
+  readonly format: ConfigFormat = 'ini' as ConfigFormat;
+  readonly extensions = ['.ini'];
+
+  parse(content: string): ConfigData {
+    try {
+      // Your parsing logic here
+      const ini = require('ini');
+      return ini.parse(content);
+    } catch (error) {
+      this.handleError('parse', error);
+    }
+  }
+
+  stringify(data: ConfigData, options: ConversionOptions = {}): string {
+    try {
+      const processedData = this.preprocess(data, options);
+      const ini = require('ini');
+      return ini.stringify(processedData);
+    } catch (error) {
+      this.handleError('stringify', error);
+    }
+  }
+}
+
+// 2. Register your converter
+const converter = new UniversalConfigConverter();
+converter.registerConverter(new INIConverter());
+
+// 3. Use it immediately!
+const ini = converter.convert(jsonString, 'json', 'ini');
+```
+
+### Benefits of the Architecture
+
+- **DRY Principle**: Common functionality (sorting, error handling) is inherited from `BaseConverter`
+- **SOLID Design**: Clean separation of concerns with strategy pattern
+- **Easy Extension**: Add new formats with ~30 lines of code
+- **Type Safe**: Full TypeScript support
+- **Automatic Integration**: File extension detection, format validation, and error messages work automatically
 ```
 
 ## Deployment
@@ -405,7 +489,7 @@ docker run -p 3000:3000 universal-config-converter
 ### Common Issues
 
 **Issue: "Cannot detect format from extension"**
-- Make sure your file has a valid extension (.json, .yaml, .yml, .toml, or .env)
+- Make sure your file has a valid extension (.json, .yaml, .yml, .toml, .xml, or .env)
 
 **Issue: "Failed to parse [FORMAT]"**
 - Verify your input file has valid syntax for the specified format
@@ -437,6 +521,7 @@ MIT
 | JSON | `.json` | JavaScript Object Notation |
 | YAML | `.yaml`, `.yml` | YAML Ain't Markup Language |
 | TOML | `.toml` | Tom's Obvious, Minimal Language |
+| XML | `.xml` | eXtensible Markup Language |
 | ENV | `.env` | Environment Variables |
 
 ## Acknowledgments
@@ -444,6 +529,7 @@ MIT
 Built with:
 - [js-yaml](https://github.com/nodeca/js-yaml) - YAML parser
 - [@iarna/toml](https://github.com/iarna/iarna-toml) - TOML parser
+- [xml2js](https://github.com/Leonidas-from-XIV/node-xml2js) - XML parser
 - [Commander.js](https://github.com/tj/commander.js) - CLI framework
 - [Express](https://expressjs.com/) - Web server
 - [TypeScript](https://www.typescriptlang.org/) - Type safety

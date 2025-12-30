@@ -43,8 +43,8 @@ describe("ConverterRegistry", () => {
       const converter = new UniversalConfigConverter();
       const formats = converter.getSupportedFormats();
       
-      expect(formats.length).toBe(4);
-      expect(formats).toEqual(expect.arrayContaining(['json', 'yaml', 'toml', 'env']));
+      expect(formats.length).toBe(5);
+      expect(formats).toEqual(expect.arrayContaining(['json', 'yaml', 'toml', 'env', 'xml']));
     });
 
     it("should return supported extensions", () => {
@@ -65,10 +65,10 @@ describe("ConverterRegistry", () => {
       const converter = new UniversalConfigConverter();
       
       expect(() => {
-        converter.convert("content", "xml" as any, "json");
-      }).toThrow(/Unsupported source format: xml/);
+        converter.convert("content", "csv" as any, "json");
+      }).toThrow(/Unsupported source format: csv/);
       expect(() => {
-        converter.convert("content", "xml" as any, "json");
+        converter.convert("content", "csv" as any, "json");
       }).toThrow(/Supported formats:/);
     });
 
@@ -76,18 +76,18 @@ describe("ConverterRegistry", () => {
       const converter = new UniversalConfigConverter();
       
       expect(() => {
-        converter.convert("{}", "json", "xml" as any);
-      }).toThrow(/Unsupported target format: xml/);
+        converter.convert("{}", "json", "csv" as any);
+      }).toThrow(/Unsupported target format: csv/);
     });
 
     it("should provide helpful error message for unsupported file extension", () => {
       const converter = new UniversalConfigConverter();
       
       expect(() => {
-        converter.convertFile("input.xml", "output.json");
-      }).toThrow(/Cannot detect format from extension: .xml/);
+        converter.convertFile("input.csv", "output.json");
+      }).toThrow(/Cannot detect format from extension: .csv/);
       expect(() => {
-        converter.convertFile("input.xml", "output.json");
+        converter.convertFile("input.csv", "output.json");
       }).toThrow(/Supported extensions:/);
     });
   });

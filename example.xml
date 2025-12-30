@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="true"?>
+<config>
+  <database>
+    <host>localhost</host>
+    <port>5432</port>
+    <name>mydb</name>
+  </database>
+  <server>
+    <port>3000</port>
+    <host>0.0.0.0</host>
+  </server>
+  <debug>true</debug>
+</config>
+

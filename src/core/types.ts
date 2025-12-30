@@ -1,4 +1,4 @@
-export type ConfigFormat = "yaml" | "json" | "toml" | "env";
+export type ConfigFormat = "yaml" | "json" | "toml" | "env" | "xml";
 
 export interface ConfigData {
   [key: string]: any;
